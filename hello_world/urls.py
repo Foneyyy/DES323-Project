@@ -23,4 +23,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
     path("example/w10", core_views.example_index),
+    path("teams/", core_views.teams),
+    path("about/", core_views.about),
+    path("prediction/", core_views.prediction)
+    
+
 ]
