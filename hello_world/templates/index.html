@@ -1,26 +1,85 @@
-{% load django_browser_reload %}
-{% load static %}
+{% extends 'layout.html' %}
 
-<!doctype html>
-<html lang="en">
+{% block title %}
+Dao Football
+{% endblock %}
 
-<head>
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
+{% block content %}
 
-<body>
-    <div class="App">
-        <header class="App-header">
-            <img src="{% static 'Octocat.png' %}" class="App-logo" alt="logo" />
-            <p>
-                GitHub Codespaces <span class="heart">♥️</span> Django
-            </p>
-            <p class="small">
-                Edit <code>hello_world/templates/index.html</code> and see changes live!
-            </p>
-        </header>
-    </div>
-</body>
+<section><h1 class="text-primary">Home</h1></section>
 
-</html>
+<button onclick="on_click()">This</button>
+<button onclick="add_list()">Add List</button>
+<ul id="list"></ul>
+<button onclick="fetch_weather()">Fetch weather</button>
+<div id="weathers"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+
+<script>
+
+    function on_click() {
+        alert('You click "This" button.')
+    }
+    function add_list() {
+        var list = document.getElementById('list');
+        var list_element = document.createElement("li")
+        var list_count = list.children.length
+        list_element.id = list_count + Math.floor(Math.random() * 100)
+        list_element.innerHTML = "List element " + `<button onclick='remove_list(${list_element.id})'>Delete</button>`
+        list.appendChild(list_element)
+    }
+    function remove_list(id) {
+        document.getElementById(id).remove();
+    }
+    function fetch_weather() {
+        axios.get('https://api.open-meteo.com/v1/forecast?latitude=14.0135&longitude=100.5305&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Asia%2FBangkok&start_date=2023-10-18&end_date=2023-10-25')
+            .then(function (response) {
+                // handle success
+                let weather_data = response.data['daily'];
+                let weather_div = document.getElementById('weathers');
+                weather_div.innerHTML = JSON.stringify(weather_data);
+            });
+    }
+</script>
+
+
+<!-- D3 Section -->
+<div id="visual"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<script>
+    async function refresh_visual() {
+        let weather_data = await
+            axios.get('https://api.open-meteo.com/v1/forecast?latitude=14.0135&longitude=100.5305&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Asia%2FBangkok&start_date=2023-10-18&end_date=2023-10-25')
+                .then(function (response) {
+                    // handle success
+                    return response.data['daily'];
+                });
+        let temp_max = [];
+        let temp_min = [];
+        weather_data['time'].forEach((data, index) => {
+            let max_obj = {
+                "date": new Date(data),
+                "temperature": weather_data['temperature_2m_max'][index]
+            }
+            let min_obj = {
+                "date": new Date(data),
+                "temperature": weather_data['temperature_2m_min'][index]
+            }
+            temp_max.push(max_obj);
+            temp_min.push(min_obj);
+        });
+        const plot = Plot.plot({
+            marks: [
+                Plot.lineY(temp_max, { x: "date", y: "temperature", tip: "x", stroke: "red" }),
+                Plot.lineY(temp_min, { x: "date", y: "temperature", tip: "x", stroke: "blue" }),
+            ]
+        })
+        const div = document.getElementById('visual');
+        div.append(plot);
+    }
+    refresh_visual(); //Call refresh_visual methods when page is loaded
+</script>
+{% endblock %}
