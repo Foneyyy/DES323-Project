@@ -7,26 +7,42 @@ Dao Football
 {% block content %}
 
 <section>
-    <h1>Upcoming Matches</h1>
-</section>
-<section>
-<img src = "{%static 'EPL Logo.png'%}"
-<img src =""width="250px"/>
-</section>
-
-<section> 
-    <center><h2>Match 1</h2>  
-        <img src ="{%static 'arsenal.png'%}" width = "75px"> VS
-    
-        <img src ="{%static 'spurs.png'%}" width = "75px"> 
-    </center>  
-    <center><h2>Match 2</h2>  
-        <img src ="{%static 'chelsea.png'%}" width = "75px"> VS
-    
-        <img src ="{%static 'manutd.png'%}" width = "75px"> 
-    </center>  
+    <h1 class="text-primary text-center">Upcoming Matches</h1>
 </section>
 
 
+<section class="text-primary">
+    <div class="d-flex flex-column align-items-center">
+        <img class="mt-5 img-fluid" src="{%static 'EPL Logo.png'%}" width="200px"  />
+        <div class="card match mt-3 mb-3 col-md-8 col-lg-6 ">
+            <h2>Match 1</h2>
+            <div class="d-flex justify-content-between align-items-center text-center gap-3">
+                <div class="d-flex flex-column">
+                    <img src="{%static 'arsenal.png'%}" width="60px"
+                        height="70px"><span>Aresenal</span></div>
+                <h3>VS</h3>
+                <div class="d-flex flex-column">
+                    <img src="{%static 'spurs.png'%}"
+                        width="70px"><span>Hottem</span>
+                </div>
+            </div>
+        </div>
+        <div class="card match mt-3 mb-3 col-md-8 col-lg-6">
+            <h2>Match 2</h2>
+            <div class="d-flex justify-content-between align-items-center text-center gap-3">
+                <div class="d-flex flex-column">
+                    <img src="{%static 'chelsea.png'%}" width="70px"
+                        height="70px"><span>Chelsea</span></div>
+                <h3>VS</h3>
+                <div class="d-flex flex-column">
+                    <img src="{%static 'manutd.png'%}"
+                        width="70px"><span>Man Utd</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    {% endblock %}
+
+
+{% endblock %}

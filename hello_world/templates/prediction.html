@@ -18,83 +18,20 @@ Dao Football
 
 <script>
     function add() {
-        alert('add');
+        console.log('add');
     }
     function edit() {
-        alert('edit');
+        console.log('edit');
     }
     function del() {
-        alert('del');
+        console.log('del');
     }
     function refresh() {
-        alert('refresh');
+        console.log('refresh');
     }
 </script>
 
-<div id="graph"></div>
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
-<script>
-    // Create a new force simulation.
-    var simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody())
-        .force("link", d3.forceLink().distance(50))
-        .force("center", d3.forceCenter(200, 200));
 
-    // Create a new D3 selection of the `<div>` element.
-    var svg = d3.select("#graph");
-
-    // Append a new `<svg>` element to the selection.
-    var svg = svg.append("svg");
-
-    // Add the nodes and links to the simulation.
-    simulation.nodes([
-        { name: "Team A", probability: 0.6 },
-        { name: "Team B", probability: 0.4 }
-    ]);
-
-    simulation.links([]);
-
-    // Start the simulation.
-    simulation.start();
-
-    // Update the positions of the circles in the graph on each tick.
-    simulation.on("tick", function () {
-        svg.selectAll("circle")
-            .attr("cx", function (d) { return d.x; })
-            .attr("cy", function (d) { return d.y; });
-    });
-
-    // Color the circles based on the team's predicted probability of winning.
-    svg.selectAll("circle")
-        .attr("fill", function (d) {
-            if (d.probability > 0.5) {
-                return "green";
-            } else {
-                return "red";
-            }
-        });
-
-    // Create circles for each node in the simulation.
-    svg.selectAll("circle")
-        .data(simulation.nodes())
-        .enter()
-        .append("circle")
-        .attr("r", 20)
-        .attr("fill", function (d) {
-            if (d.probability > 0.5) {
-                return "green";
-            } else {
-                return "red";
-            }
-        });
-
-    // Append the svg element to the #graph element
-    svg.appendTo("#graph");
-
-
-
-</script>
 
 
 {% endblock %}
