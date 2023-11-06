@@ -1,0 +1,30 @@
+<div class="container">
+    <h1>Showing {{ filter_type }} </h1>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>ID</th>
+            <th>Home</th>
+            <th>Away</th>
+            <th>HomeGoals</th>
+            <th>AwayGoals</th>
+            <th>Date</th>
+            <th>Result</th>
+            <th>Actions</th>
+        </tr>
+        {% for row in datasets %}
+        <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.home_team}}</td>
+            <td>{{ row.away_team }}</td>
+            <td>{{ row.home_goals }}</td>
+            <td>{{ row.away_goals }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.result }}</td>
+            <td>
+                <a href="/data_sci/form/edit/{{ row.id }}">Edit</a>
+                <a href="/data_sci/form/delete/{{ row.id }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
