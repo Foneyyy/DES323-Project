@@ -13,7 +13,7 @@ Dao Football
     <button type="button" class="btn btn-main" onclick="add()">Insert</button>
     <button type="button" class="btn btn-main" onclick="edit()">Edit</button>
     <button type="button" class="btn btn-outline-main" onclick="del()">Delete</button>
-    <button type="button" class="btn btn-main " onclick="refresh()">Refresh</button>
+    <button type="button" class="btn btn-main " onclick="refresh_visual()">Refresh</button>
 </section>
 
 <script>
@@ -35,48 +35,55 @@ Dao Football
 <div id="visual" class="mt-5"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 
-    const mockup_data = [
-        { team: "Team 1", probability: 0.8 },
-        { team: "Team 2", probability: 0.2 },
-    ];
-    plot = Plot.plot({
-        title: "Predicted Probability of Winning",
-        ylabel: "Team",
-        xlabel: "Probability",
-        x: {
-            axis: 'top',
-            domain: [0, 1],
+    async function refresh_visual() {
+        let w11_api = await axios.get('https://reimagined-adventure-4pq976rxqgx37gxj-8000.app.github.dev/model/').then(function (response) {
+            const data = response.data.outcome_probabilities;
+            return data[0]
+        })
+        const data = [
+            { team: "Home Win", probability: w11_api[0] },
+            { team: "Away Lose", probability: w11_api[1] },
+            { team: "Draw", probability: w11_api[2] },
+        ];
+        plot = Plot.plot({
+            title: "Predicted Probability of Winning",
+            ylabel: "Team",
+            xlabel: "Probability",
+            x: {
+                axis: 'top',
+                domain: [0, 1],
 
-        },
+            },
 
-        marks: [
-            Plot.barX(mockup_data, {
-                x: "probability",
-                y: "team",
-                fill: function (d) {
-                    if (d.probability * 100 > 50) {
-                        return '#2CB96D';
-                    } else {
-                        return "#E63946";
-                    }
-                },
-                label: "Predicted Probability",
+            marks: [
+                Plot.barX(data, {
+                    x: "probability",
+                    y: "team",
+                    fill: function (d) {
+                        if (d.probability * 100 > 50) {
+                            return '#2CB96D';
+                        } else {
+                            return "#E63946";
+                        }
+                    },
+                    label: "Predicted Probability",
 
-            }),
-            Plot.axisY({ label: null, })
+                }),
+                Plot.axisY({ label: null, })
 
-        ],
+            ],
 
-    });
-    document.getElementById('visual').appendChild(plot);
+        });
+        document.getElementById('visual').appendChild(plot);
 
+    }
 
 </script>
 
 
-</script>
 
 
 
