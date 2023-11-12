@@ -16,7 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
 from hello_world.core import views as core_views
+from data_sci import views as data_sci_views
 
 urlpatterns = [
     path("", core_views.index),
@@ -25,7 +27,16 @@ urlpatterns = [
     path("example/w10", core_views.example_index),
     path("teams/", core_views.teams),
     path("about/", core_views.about),
-    path("prediction/", core_views.prediction)
+    path("prediction/", core_views.prediction),
+    path("data_sci/", data_sci_views.data_index_view),
+    path("data_sci/list_item/all" ,data_sci_views .data_sci_item_list_all) ,
+    path("data_sci/form/add", data_sci_views.data_sci_item_add),
+    path("data_sci/form/edit/<id>", data_sci_views.data_sci_item_edit),
+    path("data_sci/form/delete/<id>", data_sci_views.data_sci_item_delete),
+    path("footballmatches/", core_views.import_data_csv),
+    path("model/", core_views.model),
+ 
+
     
 
 ]

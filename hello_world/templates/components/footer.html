@@ -1,3 +1,5 @@
+{% load static%}
+
 <style>
     a {
         color: #FAFEF8;
@@ -8,16 +10,16 @@
 <div class="footer p-1 m-1 d-none d-md-block" style="background-color: #1D3557;">
         <div class="d-flex align-items-center pe-3 ">
             <a href="/">
-                <img src="../../static/logo.svg" alt="logo" width="100">
+                <img src="{%static 'logo.svg'%}" alt="logo" width="100">
             </a>
             <div style="width: 100%;"> 
                 <div class="d-flex justify-content-between ">
-                    <img src="../../static/Dao Football.svg" alt="name" width="300">
+                    <img src="{%static 'Dao Football.svg'%}" alt="name" width="300">
                     <div class="d-flex align-items-center gap-3">
-                        <a href=""><img src="../../static/FB LOGO.svg" alt="facebook logo" srcset="" width="30"></a>
-                        <a href=""><img src="../../static/IG LOGO.svg" alt="ig logo
+                        <a href=""><img src="{%static 'FB LOGO.svg'%}" alt="facebook logo" srcset="" width="30"></a>
+                        <a href=""><img src="{%static 'IG LOGO.svg'%}" alt="ig logo
                             logo" srcset="" width="30"></a>
-                        <a href=""><img src="../../static/Spotify Logo.svg" alt="spotify logo
+                        <a href=""><img src="{%static 'Spotify Logo.svg'%}" alt="spotify logo
                             logo" srcset="" width="30"></a>
                     </div>
                 </div>

@@ -10,53 +10,82 @@
 </head>
 
 <style>
-    .text-primary{
+    *{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .text-primary {
         color: #1D3557 !important;
     }
-    .text-secondary{
+
+    .text-secondary {
         color: #457B9D !important;
     }
-    .nav-link{
+
+    .nav-link {
         color: #FAFEF8 !important;
     }
-    .btn-main{
+
+    .btn-main {
         background-color: #1D3557;
         border-color: #1D3557;
         color: #FAFEF8;
 
     }
-    .btn-secondary{
+
+    .btn-secondary {
         background-color: #457B9D;
     }
-    .btn-outline-main{
+
+    .btn-outline-main {
         color: #1D3557;
         border-color: #1D3557;
     }
-    .btn-main:active , .btn-outline-main:active{
-        background-color: #1D3557;
-        color: #FAFEF8;
-        
-    }
-    .btn-main:hover , .btn-outline-main:hover{
+
+    .btn-main:active,
+    .btn-outline-main:active {
         background-color: #1D3557;
         color: #FAFEF8;
 
     }
-  
+
+    .btn-main:hover,
+    .btn-outline-main:hover {
+        background-color: #1D3557;
+        color: #FAFEF8;
+
+    }
+
+    .card.match {
+        background-color: #A8DADC;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 50px;
+        padding: 15px 55px;
+        
+    }
+
+    .card span{
+        font-weight: 700;
+    }
+
+    .card img {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
 
 <body>
-   <div >
-    {% include 'components/header.html' %}
-    <div class="container-fluid" style="background-color: #FAFEF8;">
-        <div id="content" style="min-height:80vh;">
-            {% block content %}
-            
-            {% endblock %}
+    <div>
+        {% include 'components/header.html' %}
+        <div class="container-fluid" style="background-color: #FAFEF8;">
+            <div id="content" style="min-height:80vh;">
+                {% block content %}
+
+                {% endblock %}
+            </div>
         </div>
+        {% include 'components/footer.html' %}
     </div>
-    {% include 'components/footer.html' %}
-   </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
