@@ -7,7 +7,7 @@ from .models import *
 def data_index_view(request):
     '''This function render index page of Data_sci views'''
     
-    return HttpResponse('Welcome to [Your student_id] [Your name] [Your lastname] views!')
+    return HttpResponse('Welcome to views!')
 
 def data_sci_item_list_all(request):
     dataset_objs = FootballMatches.objects.all()
