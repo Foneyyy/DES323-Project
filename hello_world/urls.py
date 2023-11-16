@@ -33,7 +33,7 @@ urlpatterns = [
     path("data_sci/form/add", data_sci_views.data_sci_item_add),
     path("data_sci/form/edit/<id>", data_sci_views.data_sci_item_edit),
     path("data_sci/form/delete/<id>", data_sci_views.data_sci_item_delete),
-    path("footballmatches/", core_views.import_data_csv),
+    path("import_football_matches/", core_views.import_data_csv),
     path("model/", core_views.model),
  
 
