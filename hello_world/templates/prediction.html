@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{%load static%}
 
 {% block title %}
 Dao Football
@@ -6,29 +7,57 @@ Dao Football
 
 {% block content %}
 
-<section class="pt-3">
-    <h1 class="title">Prediction</h1>
+<section class="pt-4 ps-4">
+    <h1 class="title fs-3">Prediction</h1>
 </section>
-<section>
-    <button type="button" class="btn btn-main" onclick="add()">Insert</button>
-    <button type="button" class="btn btn-main" onclick="edit()">Edit</button>
-    <button type="button" class="btn btn-outline-main" onclick="del()">Delete</button>
-    <button type="button" class="btn btn-main " onclick="refresh_visual()">Refresh</button>
+<section class="d-flex justify-content-center align-items-center mt-5 pt-4 gap-3 gap-md-5 ">
+    <div class="text-center">
+        <h3>
+            Home Team
+        </h3><img class="logo" src="{%static 'arsenal.png'%}" alt="" srcset="">
+        <select class="form-select" aria-label="Default select example" id="home-team">
+            <option value="" selected disabled>Select the team</option>
+            {% for team in teams %}
+            <option value="{{ team }}">{{ team }}</option>
+            {% endfor %}
+        </select>
+
+    </div>
+    <div>
+        <h3>VS</h3>
+    </div>
+    <div class="text-center">
+        <h3>
+            Away Team
+        </h3><img class="logo" src="{%static 'arsenal.png'%}" alt="" srcset="">
+        <select class="form-select" aria-label="Default select example" id="away-team">
+            <option value="" selected disabled>Select the team</option>
+            {% for team in teams %}
+            <option value="{{ team }}">{{ team }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
 </section>
 
+
 <script>
-    function add() {
-        console.log('add');
-    }
-    function edit() {
-        console.log('edit');
-    }
-    function del() {
-        console.log('del');
-    }
-    function refresh() {
-        console.log('refresh');
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var homeTeamSelect = document.getElementById('home-team');
+        var awayTeamSelect = document.getElementById('away-team');
+
+        homeTeamSelect.addEventListener('change', function () {
+            var selectedHomeTeam = homeTeamSelect.value;
+            console.log('Selected Home Team:', selectedHomeTeam);
+            // Perform further actions if needed
+        });
+
+        awayTeamSelect.addEventListener('change', function () {
+            var selectedAwayTeam = awayTeamSelect.value;
+            console.log('Selected Away Team:', selectedAwayTeam);
+            // Perform further actions if needed
+        });
+    });
 </script>
 
 
@@ -37,7 +66,7 @@ Dao Football
 <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    
+
 
     async function refresh_visual() {
         let w11_api = await axios.get('https://reimagined-adventure-4pq976rxqgx37gxj-8000.app.github.dev/model/').then(function (response) {

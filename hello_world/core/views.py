@@ -21,8 +21,18 @@ def teams(request):
     return render(request, "teams.html", context)
 
 def prediction(request):
+    teams = [
+        "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton & Hove Albion",
+        "Chelsea", "Crystal Palace", "Everton", "Fulham", "Leeds United",
+        "Leicester City", "Liverpool", "Manchester City", "Manchester United",
+        "Newcastle United", "Nottingham Forest", "Southampton", "Tottenham Hotspur",
+        "West Ham United", "Wolverhampton Wanderers"
+    ]
+
     context = {
+        'teams': teams,
     }
+
     return render(request, "prediction.html", context)
 
 def about(request):
