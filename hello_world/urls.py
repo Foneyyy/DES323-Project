@@ -24,7 +24,6 @@ urlpatterns = [
     path("", core_views.index),
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
-    path("example/w10", core_views.example_index),
     path("teams/", core_views.teams),
     path("about/", core_views.about),
     path("prediction/", core_views.prediction),
@@ -34,7 +33,7 @@ urlpatterns = [
     path("data_sci/form/edit/<id>", data_sci_views.data_sci_item_edit),
     path("data_sci/form/delete/<id>", data_sci_views.data_sci_item_delete),
     path("import_football_matches/", core_views.import_data_csv),
-    path("model/", core_views.model),
+    path("predict_match/", core_views.model),
  
 
     

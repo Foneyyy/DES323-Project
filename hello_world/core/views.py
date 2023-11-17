@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+import json
+import os
 
 
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.preprocessing import LabelEncoder
@@ -23,14 +24,19 @@ def teams(request):
 def prediction(request):
     teams = [
         "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton & Hove Albion",
-        "Chelsea", "Crystal Palace", "Everton", "Fulham", "Leeds United",
-        "Leicester City", "Liverpool", "Manchester City", "Manchester United",
-        "Newcastle United", "Nottingham Forest", "Southampton", "Tottenham Hotspur",
+        "Burnly","Chelsea", "Crystal Palace", "Everton", "Fulham",
+        "Liverpool","Luton Town" , "Manchester City", "Manchester United",
+        "Newcastle United", "Nottingham Forest", "Sheffield United", "Tottenham Hotspur",
         "West Ham United", "Wolverhampton Wanderers"
     ]
 
+    codespace_name = os.getenv("CODESPACE_NAME")
+    codespace_domain = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
+    codespace_url = f'https://{codespace_name}-8000.{codespace_domain}'
+
     context = {
         'teams': teams,
+        'url': codespace_url
     }
 
     return render(request, "prediction.html", context)
@@ -40,13 +46,6 @@ def about(request):
     }
     return render(request, "about.html", context)
 
-
-
-
-
-def example_index(request):
-    context = {}
-    return render(request, "example_w10/index.html", context=context)
 
 def import_data_csv(request):
     csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFnpIL9V4VCSdMSw4pnC2atxHyc0rNZl4RJ2XourJ6e3-wEfD5cT6JVW3PeuNUTTFvngEK0fm9CyYX/pub?output=csv'
@@ -70,8 +69,7 @@ def import_data_csv(request):
             errors.append(index)
     return JsonResponse({"success_indexs":sucesss, "error_indexs": errors})
 
-def model(request):
-
+def train_model():
     matches = FootballMatches.objects.all().values()
     df = pd.DataFrame(matches)
 
@@ -92,26 +90,41 @@ def model(request):
     etc = ExtraTreesClassifier(n_estimators=100, random_state=42)
     etc.fit(X_train, y_train)
 
-    new_match = {
-        'home_team': request.POST.get('home_team'),
-        'away_team': request.POST.get('away_team'),
-    }
+    return etc, label_encoders
+    
 
-    for feature in features:
-        new_match[feature] = label_encoders[feature].transform([new_match[feature]])[0]
+def model(request):
+    if request.method == 'POST':
+        try:
+            new_match_data = json.loads(request.body)
+            new_match = {
+                'home_team': new_match_data['home_team'],
+                'away_team': new_match_data['away_team'],
+            }
+        except:
+            return JsonResponse({'error': 'Invalid JSON data'})
 
-    new_match_df = pd.DataFrame([new_match])
-    pred = etc.predict_proba(new_match_df)
+        etc, label_encoders = train_model()
+        features = ['home_team', 'away_team']
 
-    outcome_prob  = []
-    for x in pred[0]:
-        rounded_prob = round(x, 2)
-        outcome_prob.append(rounded_prob)
+        for feature in features:
+            new_match[feature] = label_encoders[feature].transform([new_match[feature]])[0]
 
-    response_data = {
-        'home_lose': outcome_prob[0],
-        'draw': outcome_prob[1],
-        'home_win': outcome_prob[2],
-    }
+        new_match_df = pd.DataFrame([new_match])
 
-    return JsonResponse(response_data)
+        pred = etc.predict_proba(new_match_df)
+
+        outcome_prob = []
+        for x in pred[0]:
+            rounded_prob = round(x, 2)
+            outcome_prob.append(rounded_prob)
+
+        response_data = {
+            'home_lose': outcome_prob[0],
+            'draw': outcome_prob[1],
+            'home_win': outcome_prob[2],
+        }
+
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse({'error': 'Invalid request method'})
