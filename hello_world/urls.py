@@ -19,6 +19,8 @@ from django.urls import path, include
 
 from hello_world.core import views as core_views
 from data_sci import views as data_sci_views
+from django.urls import path
+from . import views
 
 urlpatterns = [
     path("", core_views.index),
@@ -34,8 +36,10 @@ urlpatterns = [
     path("data_sci/form/delete/<id>", data_sci_views.data_sci_item_delete),
     path("import_football_matches/", core_views.import_data_csv),
     path("predict_match/", core_views.model),
+    path('search/', views.search_feature, name='search-view'),
+]
  
 
     
 
-]
+

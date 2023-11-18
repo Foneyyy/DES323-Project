@@ -6,10 +6,36 @@ Dao Football
 
 {% block content %}
 <h1>Teams</h1>
-<form class="d-flex" role="search" method="POST">
-    <input class="form-control me-2" type="search" placeholder="Search" name="search_query" required
-        aria-label="Search">
+<form class="d-flex" role="search" method="POST" action="{% url 'search-view' %}">
+    <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search for something"
+        name="search_query"
+        required aria-label="Search"
+    >
     <button class="btn btn-outline-success" type="submit">Search</button>
-</form>
+ </form>
 
+ {% if query %}
+    <div>
+        <div>
+        <!-- check if there is a result in the database-->
+        {% if posts %}
+            <!-- loop through search query if there is a result -->
+            {% for post in posts %}
+                <div>
+                    <!-- return search query -->
+                    <p>{{post.title}}</p>
+                </div>
+            {% endfor %}
+            <!-- return a message if there are no results found. -->
+        {% else %}
+            <h3>No search results found</h3>
+        {% endif %}
+        </div>
+    </div>
+{% else %}
+    <h1>Please enter a search query</h1>
+{% endif %}
 {% endblock %}

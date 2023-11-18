@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse, HttpResponse
 import json
 import os
-
+from .models import ModelName
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesClassifier
@@ -10,6 +10,8 @@ from sklearn.preprocessing import LabelEncoder
 
 import pandas as pd
 from data_sci.models import FootballMatches
+
+import requests
 
 def index(request):
     context = {
@@ -144,3 +146,21 @@ def model(request):
         return JsonResponse(response_data)
     else:
         return HttpResponse({'error': 'Invalid request method'})
+
+def example_call_external_api(request):
+    api_url =''
+    response = requests.get(api_url)
+    print(response.json())
+    return JsonResponse(response.json())
+
+
+def search_feature(request):
+    # Check if the request is a post request.
+    if request.method == 'POST':
+        # Retrieve the search query entered by the user
+        search_query = request.POST['search_query']
+        # Filter your model by the search query
+        posts = Model.objects.filter(fieldName__contains=search_query)
+        return render(request, 'app/template_name.html', {'query':search_query, 'posts':posts})
+    else:
+        return render(request, 'app/template_name.html',{})
