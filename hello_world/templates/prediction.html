@@ -6,60 +6,50 @@ Dao Football
 {% endblock %}
 
 {% block content %}
+<input type="hidden" id="url" name="variable" value="{{ url }}">
 
 <section class="pt-4 ps-4">
-    <h1 class="title fs-3">Prediction</h1>
+    <h1 class="title fs-3 text-">Prediction</h1>
 </section>
 <section class="d-flex justify-content-center align-items-center mt-5 pt-4 gap-3 gap-md-5 ">
-    <div class="text-center">
-        <h3>
+    <div class="text-center d-flex flex-column align-items-center gap-4">
+        <h3 class="text-primary fs-bolder">
             Home Team
-        </h3><img class="logo" src="{%static 'arsenal.png'%}" alt="" srcset="">
+        </h3>
+        <div style="height: 135px ;"><img id="home-team-image" class="logo"
+                src="{% static '/team-logo/placeholder-image.png' %}" alt="" srcset=""></div>
         <select class="form-select" aria-label="Default select example" id="home-team">
             <option value="" selected disabled>Select the team</option>
             {% for team in teams %}
-            <option value="{{ team }}">{{ team }}</option>
+            <option value="{{ team.value }}">{{ team.name }}</option>
             {% endfor %}
         </select>
+        <span id="home-team-error" class="text-danger"></span>
 
     </div>
     <div>
-        <h3>VS</h3>
+        <h3 class="text-primary fs-bolder">
+            VS</h3>
     </div>
-    <div class="text-center">
-        <h3>
+    <div class="text-center d-flex flex-column align-items-center gap-4">
+        <h3 class="text-primary fs-bolder">
             Away Team
-        </h3><img class="logo" src="{%static 'arsenal.png'%}" alt="" srcset="">
+        </h3>
+        <div style="height: 135px;"><img id="away-team-image" class="logo"
+                src="{% static '/team-logo/placeholder-image.png' %}" alt="" srcset=""></div>
         <select class="form-select" aria-label="Default select example" id="away-team">
             <option value="" selected disabled>Select the team</option>
             {% for team in teams %}
-            <option value="{{ team }}">{{ team }}</option>
+            <option value="{{ team.value }}">{{ team.name }}</option>
             {% endfor %}
         </select>
+        <span id="away-team-error" class="text-danger"></span>
     </div>
-
 </section>
-{{url}}
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var homeTeamSelect = document.getElementById('home-team');
-        var awayTeamSelect = document.getElementById('away-team');
-
-        homeTeamSelect.addEventListener('change', function () {
-            var selectedHomeTeam = homeTeamSelect.value;
-            console.log('Selected Home Team:', selectedHomeTeam);
-            // Perform further actions if needed
-        });
-
-        awayTeamSelect.addEventListener('change', function () {
-            var selectedAwayTeam = awayTeamSelect.value;
-            console.log('Selected Away Team:', selectedAwayTeam);
-            // Perform further actions if needed
-        });
-    });
-</script>
+<section class="mt-3 d-flex justify-content-center">
+    <button id="predict-button" class="btn btn-main" onclick="Predict()">Predict</button>
+</section>
 
 
 <div id="visual" class="mt-5"></div>
@@ -67,50 +57,128 @@ Dao Football
 <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+    const url = document.getElementById('url').value;
+
+    const homeTeamSelect = document.getElementById('home-team');
+    const awayTeamSelect = document.getElementById('away-team');
+    const homeTeamImage = document.getElementById('home-team-image');
+    const awayTeamImage = document.getElementById('away-team-image');
+    const homeTeamError = document.getElementById('home-team-error');
+    const awayTeamError = document.getElementById('away-team-error');
+
+    homeTeamSelect.addEventListener('change', () => {
+        const selectedHomeTeam = homeTeamSelect.options[homeTeamSelect.selectedIndex].value;
+        const homeTeamIamgeSrc = `/static/team-logo/${selectedHomeTeam}.png`;
+        homeTeamImage.src = homeTeamIamgeSrc
+    });
+
+    awayTeamSelect.addEventListener('change', () => {
+        const selectedAwayTeam = awayTeamSelect.options[awayTeamSelect.selectedIndex].value;
+        const awayTeamImageSrc = `/static/team-logo/${selectedAwayTeam}.png`;
+        awayTeamImage.src = awayTeamImageSrc;
+    });
+
+    const Predict = async () => {
+        const selectedHomeTeam = homeTeamSelect.options[homeTeamSelect.selectedIndex].value;
+        const selectedAwayTeam = awayTeamSelect.options[awayTeamSelect.selectedIndex].value;
+
+        if (!selectedHomeTeam) {
+            homeTeamError.textContent = 'Please select a home team';
+        } else {
+            homeTeamError.textContent = '';
+        }
+
+        if (!selectedAwayTeam) {
+            awayTeamError.textContent = 'Please select an away team';
+        } else {
+            awayTeamError.textContent = '';
+        }
 
 
-    async function refresh_visual() {
-        let w11_api = await axios.get('https://reimagined-adventure-4pq976rxqgx37gxj-8000.app.github.dev/model/').then(function (response) {
-            const data = response.data.outcome_probabilities;
-            return data[0]
-        })
-        const data = [
-            { team: "Home Win", probability: w11_api[0] },
-            { team: "Away Lose", probability: w11_api[1] },
-            { team: "Draw", probability: w11_api[2] },
-        ];
-        plot = Plot.plot({
-            title: "Predicted Probability of Winning",
-            ylabel: "Team",
-            xlabel: "Probability",
-            x: {
-                axis: 'top',
-                domain: [0, 1],
+        if (selectedHomeTeam && selectedAwayTeam) {
 
-            },
+            if (selectedHomeTeam === selectedAwayTeam) {
+                alert('You can not pick the same team');
+            } else {
+                const teamData = JSON.stringify({
+                    home_team: selectedHomeTeam,
+                    away_team: selectedAwayTeam
+                });
+                try {
+                    data = await predict_match(teamData)
+                    console.log(data);
+                } catch (error) {
+                    throw error
+                }
+                if (data) {
+                    const toPlotData = [
+                        { team: "Win", probability: data.home_win * 100 },
+                        { team: "Draw", probability: data.draw * 100 },
+                        { team: "Lose", probability: data.home_lose * 100 },
+                    ];
+                    document.getElementById('visual').innerHTML = '';
 
-            marks: [
-                Plot.barX(data, {
-                    x: "probability",
-                    y: "team",
-                    fill: function (d) {
-                        if (d.probability * 100 > 50) {
-                            return '#2CB96D';
-                        } else {
-                            return "#E63946";
-                        }
-                    },
-                    label: "Predicted Probability",
 
-                }),
-                Plot.axisY({ label: null, })
+                    plot = Plot.plot({
+                        title: "Predicted Probability of Home Winning",
+                        ylabel: "Team",
+                        xlabel: "Probability",
+                        x: {
+                            axis: 'top',
+                            domain: [0, 100],
 
-            ],
+                        },
+                        backgroundColor: '#FAFEF8',
+                        maring: 80,
 
-        });
-        document.getElementById('visual').appendChild(plot);
+                        marks: [
+                            Plot.barX(toPlotData, {
+                                x: "probability",
+                                y: "team",
+                                fill: '#A8DADC',
+                                label: "Predicted Probability",
+
+                            }),
+                            Plot.axisY({ label: null, })
+
+                        ],
+
+                    });
+                    document.getElementById('visual').appendChild(plot);
+
+                }
+
+            }
+
+
+        }
+
+    };
+
+
+    async function predict_match(match) {
+        const apiUrl = `${url}/predict_match/`
+        console.log(match);
+        try {
+            data = await axios.post(apiUrl, match).then(function (response) {
+                return response.data
+            })
+            return data
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert("Something wrong with Machine Learning. Please Contact Us or Try again")
+            throw error;
+
+        }
 
     }
+
+
+
+
+
+
+
 
 </script>
 

@@ -23,11 +23,27 @@ def teams(request):
 
 def prediction(request):
     teams = [
-        "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton & Hove Albion",
-        "Burnly","Chelsea", "Crystal Palace", "Everton", "Fulham",
-        "Liverpool","Luton Town" , "Manchester City", "Manchester United",
-        "Newcastle United", "Nottingham Forest", "Sheffield United", "Tottenham Hotspur",
-        "West Ham United", "Wolverhampton Wanderers"
+        {"value":"Arsenal", "name": "Arsenal"}, 
+        {"value":"Aston Villa", "name": "Aston Villa"}, 
+        {"value":"Bournemouth", "name": "Bournemouth"}, 
+        {"value":"Brentford", "name": "Brentford"}, 
+        {"value":"Brighton", "name": "Brighton & Hove Albion"}, 
+        {"value":"Burnley", "name": "Burnley"}, 
+        {"value":"Chelsea", "name": "Chelsea"}, 
+        {"value":"Crystal Palace", "name": "Crystal Palace"}, 
+        {"value":"Everton", "name": "Everton"}, 
+        {"value":"Fulham", "name": "Fulham"}, 
+        {"value":"Liverpool", "name": "Liverpool"}, 
+        {"value":"Luton Town", "name": "Luton Town"}, 
+        {"value":"Manchester City", "name": "Manchester City"}, 
+        {"value":"Manchester Utd", "name": "Manchester United"}, 
+        {"value":"Newcastle Utd", "name": "Newcastle United"}, 
+        {"value":"Nott'ham Forest", "name": "Nottingham Forest"}, 
+        {"value":"Sheffield Utd", "name": "Sheffield United"}, 
+        {"value":"Tottenham", "name": "Tottenham Hotspur"}, 
+        {"value":"West Ham", "name": "West Ham United"}, 
+        {"value":"Wolves", "name": "Wolverhampton Wanderers"}, 
+    
     ]
 
     codespace_name = os.getenv("CODESPACE_NAME")
