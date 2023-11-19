@@ -147,19 +147,8 @@ def model(request):
         return HttpResponse({'error': 'Invalid request method'})
 
 def example_call_external_api(request):
-    api_url =''
+    api_url ='https://apiv3.apifootball.com/?action=get_teams&league_id=152&APIkey=85d5ef406e401e273453ad6265a814c671839b32ab3af74b05a879b3f346f800'
     response = requests.get(api_url)
-    print(response.json())
-    return JsonResponse(response.json())
+    return JsonResponse(response.json(),safe=False)
 
 
-def search_feature(request):
-    # Check if the request is a post request.
-    if request.method == 'POST':
-        # Retrieve the search query entered by the user
-        search_query = request.POST['search_query']
-        # Filter your model by the search query
-        posts = Model.objects.filter(fieldName__contains=search_query)
-        return render(request, 'app/template_name.html', {'query':search_query, 'posts':posts})
-    else:
-        return render(request, 'app/template_name.html',{})
