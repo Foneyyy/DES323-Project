@@ -2,7 +2,6 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse, HttpResponse
 import json
 import os
-from .models import ModelName
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesClassifier

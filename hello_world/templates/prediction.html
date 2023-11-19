@@ -52,7 +52,7 @@ Dao Football
 </section>
 
 
-<div id="visual" class="mt-5"></div>
+<div id="visual" class="mt-5 d-flex justify-content-center"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -123,13 +123,13 @@ Dao Football
                         title: "Predicted Probability of Home Winning",
                         ylabel: "Team",
                         xlabel: "Probability",
+                        
                         x: {
                             axis: 'top',
                             domain: [0, 100],
 
                         },
                         backgroundColor: '#FAFEF8',
-                        maring: 80,
 
                         marks: [
                             Plot.barX(toPlotData, {
@@ -137,6 +137,7 @@ Dao Football
                                 y: "team",
                                 fill: '#A8DADC',
                                 label: "Predicted Probability",
+                         
 
                             }),
                             Plot.axisY({ label: null, })
@@ -144,6 +145,8 @@ Dao Football
                         ],
 
                     });
+
+                    
                     document.getElementById('visual').appendChild(plot);
 
                 }
