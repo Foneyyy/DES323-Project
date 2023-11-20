@@ -25,7 +25,7 @@ urlpatterns = [
     path("", core_views.index),
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
-    path("teams/", core_views.teams),
+    path("teams/", core_views.teams, name ='teams'),
     path("about/", core_views.about),
     path("prediction/", core_views.prediction),
     path("data_sci/", data_sci_views.data_index_view),
@@ -36,7 +36,6 @@ urlpatterns = [
     path("import_football_matches/", core_views.import_data_csv),
     path("predict_match/", core_views.model),
     path("import_football_teams/",core_views.example_call_external_api),
-    ##path('search/', core_views.search_feature,)
 ]
  
 

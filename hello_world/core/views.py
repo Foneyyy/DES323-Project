@@ -18,7 +18,10 @@ def index(request):
     return render(request, "index.html", context)
 
 def teams(request):
-    context = {
+    data = example_call_external_api()
+    
+    context = { "prem_teams": data
+            
     }
     return render(request, "teams.html", context)
 
@@ -146,9 +149,9 @@ def model(request):
     else:
         return HttpResponse({'error': 'Invalid request method'})
 
-def example_call_external_api(request):
+def example_call_external_api():
     api_url ='https://apiv3.apifootball.com/?action=get_teams&league_id=152&APIkey=85d5ef406e401e273453ad6265a814c671839b32ab3af74b05a879b3f346f800'
     response = requests.get(api_url)
-    return JsonResponse(response.json(),safe=False)
+    return response.json()
 
 

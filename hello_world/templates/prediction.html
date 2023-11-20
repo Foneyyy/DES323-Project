@@ -22,7 +22,13 @@ Dao Football
         <select class="form-select" aria-label="Default select example" id="home-team">
             <option value="" selected disabled>Select the team</option>
             {% for team in teams %}
-            <option value="{{ team.value }}">{{ team.name }}</option>
+                {% if team.value == "Luton Town" %}
+                    <option value="{{ team.value }}" disabled>{{ team.name }}</option>
+            
+
+                {% else %}
+                    <option value="{{ team.value }}">{{ team.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
         <span id="home-team-error" class="text-danger"></span>
@@ -41,7 +47,13 @@ Dao Football
         <select class="form-select" aria-label="Default select example" id="away-team">
             <option value="" selected disabled>Select the team</option>
             {% for team in teams %}
-            <option value="{{ team.value }}">{{ team.name }}</option>
+                {% if team.value == "Luton Town" %}
+                    <option value="{{ team.value }}" disabled>{{ team.name }}</option>
+            
+
+                {% else %}
+                    <option value="{{ team.value }}">{{ team.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
         <span id="away-team-error" class="text-danger"></span>

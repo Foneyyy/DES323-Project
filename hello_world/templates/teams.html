@@ -5,43 +5,76 @@ Dao Football
 {% endblock %}
 
 {% block content %}
-<h1>Teams</h1>
-<form class="d-flex" role="search" method="POST">
-    <input
-        class="form-control me-2"
-        type="search"
-        placeholder="Search for something"
-        name="search_query"
-        required aria-label="Search"
-    >
-    <button class="btn btn-outline-success" type="submit">Search</button>
- </form>
 
- {% if query %}
-    <div>
-        <div>
-        <!-- loop through search query -->
-        {% for post in posts %}
-            <div>
-                <!-- return search query -->
+<style>
+    .btn-outline-dark {
+        color: #1D3557;
+        border-color: #1D3557;
+    }
 
-                <section class="pt-5">
-                    <h1 class="title mb-4">Information</h1>
-                    <div class="card">
-                        
-                
-                            
-                
+    .btn-outline-dark:active {
+        background-color: #1D3557;
+        border-color: #1D3557;
+    }
+
+    .btn-outline-dark:hover {
+        background-color: #1D3557;
+        border-color: #1D3557;
+    }
+</style>
+
+<section class="pt-4 pb-2">
+    <h3 class="title mb-3">Teams</h3>
+    <form class="d-flex" role="search" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search for Your Interested Team" name="search_query"
+            required aria-label="Search" value="{{ request.GET.search_query }}">
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+    </form>
+</section>
+
+{% if request.GET.search_query %}
+<h2>Search Results for "<strong>{{ request.GET.search_query }}</strong>"</h2>
+{% for team in prem_teams %}
+{% if request.GET.search_query|lower in team.team_name|lower %}
+<div class="mt-4">
+    <section class="container-sm">
+        <h1 class="title sub mb-4">{{ team.team_name }}</h1>
+        <div class="card p-3 p-md-5">
+            <div class="card-body">
+                <div class="d-flex flex-column flex-sm-row gap-3 mb-4 align-items-center">
+                    <img src="{{team.team_badge}}" alt="" style="object-fit: contain; max-width: 250px;">
+                    <div>
+                        <p class="card-text"><strong>Stadium: </strong>{{ team.venue.venue_name }}</p>
+                        <p class="card-text"><strong>Address:</strong> {{ team.venue.venue_address }}, {{ team.venue.venue_city }}</p>
+                        <p class="card-text"><strong>Capacity:</strong> {{ team.venue.venue_capacity }}</p>
+                        <p class="card-text"><strong>EST: </strong> {{ team.team_founded }}</p>
                     </div>
-                    
-                </section>
+                </div>
+                <h3 class="card-title ">Coaches</h3>
+                <ul class="list-group">
+                    {% for coach in team.coaches %}
+                    <li class="list-group-item" style="max-width: 560px;" >
+                        <p class="fw-bolder m-0">{{ coach.coach_name }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <h3 class="card-title mt-3">Players</h3>
+                <ul class="list-group ">
+                    {% for player in team.players %}
+                    <li class="list-group-item" style="max-width: 560px;">
+                        <p class="m-0"><strong>{{ player.player_name }}</strong> - {{ player.player_type }}</p>
+                        <p class="m-0">Age: {{player.player_age}}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
-        {% endfor %}
         </div>
-    </div>
+    </section>
+</div>
+{% endif %}
+{% endfor %}
 {% else %}
-    <!-- return a message if the user does not enter a search query -->
-    <h1>Please enter a search query</h1>
+<h2>Please enter team's name</h2>
 {% endif %}
 
 {% endblock %}
